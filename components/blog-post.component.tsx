@@ -12,14 +12,21 @@ import { Comment } from "./comment.component";
 interface IProps {
   title: string;
   children: React.ReactNode;
-  initialComments: string[];
+  comments: string[];
+  onCommentCreated: (comment: string) => Promise<void>;
 }
 
-export const BlogPost: FC<IProps> = ({ title, initialComments, children }) => {
+export const BlogPost: FC<IProps> = ({
+  title,
+  comments,
+  onCommentCreated,
+  children,
+}) => {
   const [userComments, setUserComments] = useState<string[]>([]);
   const [newComment, setNewComment] = useState("");
 
   const handleCommentSubmit = () => {
+    onCommentCreated(newComment);
     setUserComments([...userComments, newComment]);
     setNewComment("");
   };
@@ -49,11 +56,12 @@ export const BlogPost: FC<IProps> = ({ title, initialComments, children }) => {
             marginBottom: 4,
           }}
         >
-          {initialComments.map((comment, index) => (
-            <Comment key={index} content={comment} />
-          ))}
-          {userComments.map((comment, index) => (
-            <Comment key={index} content={comment} createdByUser />
+          {comments.map((comment, index) => (
+            <Comment
+              key={index}
+              content={comment}
+              createdByUser={userComments.some((c) => c === comment)}
+            />
           ))}
         </Box>
 

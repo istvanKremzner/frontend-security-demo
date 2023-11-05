@@ -1,34 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BlogPost } from "../components/blog-post.component";
 import { JsArticle } from "@/components/js-article.component";
 
-const posts = [
-  {
-    title: "Js is awesome",
-    content: "This is the content of the first blog post.",
-  },
-];
-
-const initialComments = [
-  "Best article ever! 😍",
-  "Js ftw 🌚",
-  "Nice job ChatGpt 🫡",
-];
-
 const Home = () => {
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const result = await fetch("/api/comments");
+        const resultBody = await result.json();
+
+        setComments(resultBody.comments);
+      } catch {
+        console.log("Couldn't retrieve comments!");
+      }
+    })();
+  }, []);
+
   return (
     <div>
-      {posts.map((post, index) => (
-        <BlogPost
-          key={index}
-          initialComments={initialComments}
-          title={
-            "The Awesomeness of JavaScript: A Versatile and Powerful Programming Language"
-          }
-        >
-          <JsArticle />
-        </BlogPost>
-      ))}
+      <BlogPost
+        comments={comments}
+        title={
+          "The Awesomeness of JavaScript: A Versatile and Powerful Programming Language"
+        }
+        onCommentCreated={async (comment) => {
+          const response = await fetch("/api/comments/create", {
+            method: "POST",
+            body: JSON.stringify({ comment }),
+          });
+
+          const newComments = await response.json();
+
+          setComments(newComments.comments);
+        }}
+      >
+        <JsArticle />
+      </BlogPost>
     </div>
   );
 };
