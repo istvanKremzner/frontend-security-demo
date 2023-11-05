@@ -1,4 +1,11 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { FC, useState } from "react";
 import { Comment } from "./comment.component";
 
@@ -19,7 +26,7 @@ export const BlogPost: FC<IProps> = ({ title, initialComments, children }) => {
 
   return (
     <Box component="section" sx={{ margin: "auto", padding: "5vh 15vw" }}>
-      <Paper sx={{ padding: "5vmin" }}>
+      <Paper sx={{ padding: "5vmin", borderRadius: "2rem" }}>
         <Typography variant="h2" sx={{ marginBottom: "5vh" }}>
           {title}
         </Typography>
@@ -27,14 +34,19 @@ export const BlogPost: FC<IProps> = ({ title, initialComments, children }) => {
           {children}
         </Box>
 
-        <Typography variant="h3">Comments</Typography>
+        <Divider sx={{ margin: "5vh 0" }} />
+
+        <Typography variant="h3" sx={{ marginBottom: 4 }}>
+          Comments
+        </Typography>
 
         <Box
           component="section"
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-end",
+            alignItems: "flex-start",
+            marginBottom: 4,
           }}
         >
           {initialComments.map((comment, index) => (
@@ -57,10 +69,10 @@ export const BlogPost: FC<IProps> = ({ title, initialComments, children }) => {
             }
           }}
         />
-
         <Button
           onClick={handleCommentSubmit}
-          sx={{ display: "block", marginLeft: "auto" }}
+          sx={{ display: "block", marginLeft: "auto", marginTop: 2 }}
+          variant="outlined"
         >
           Add Comment
         </Button>

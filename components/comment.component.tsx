@@ -46,6 +46,7 @@ export const Comment: FC<IProps> = ({ content, createdByUser }) => {
           createdByUser ? theme.palette.primary.dark : undefined,
         color: (theme) =>
           createdByUser ? theme.palette.text.secondary : undefined,
+        alignSelf: createdByUser ? "flex-end" : undefined,
       }}
     >
       <div ref={contentRef} dangerouslySetInnerHTML={{ __html: content }} />
